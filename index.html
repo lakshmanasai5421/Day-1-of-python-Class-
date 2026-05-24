@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Python Fundamentals </title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy:   #0b1437;
+    --navy2:  #132057;
+    --gold:   #d4a843;
+    --gold2:  #f0c060;
+    --slate:  #8895b3;
+    --ice:    #e8eef8;
+    --white:  #ffffff;
+    --card:   #111d45;
+    --accent: #4a7cf0;
+    --green:  #3ecf8e;
+    --coral:  #f06060;
+    --radius: 16px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 60px;
+    background: rgba(11,20,55,0.82);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(212,168,67,0.15);
+    transition: padding 0.3s;
+  }
+  nav.scrolled { padding: 12px 60px; }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+  }
+  .nav-logo span { color: var(--white); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: var(--slate); font-size: 0.875rem; text-decoration: none;
+    font-weight: 500; letter-spacing: 0.3px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--gold); color: var(--navy);
+    padding: 9px 22px; border-radius: 50px;
+    font-size: 0.85rem; font-weight: 600;
+    text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(212,168,67,0.35); }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 120px 60px 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 80% 40%, rgba(74,124,240,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 20% 70%, rgba(212,168,67,0.12) 0%, transparent 55%),
+      var(--navy);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(136,149,179,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(136,149,179,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+  }
+  .hero-inner {
+    position: relative; z-index: 2;
+    max-width: 820px; text-align: center;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(212,168,67,0.12);
+    border: 1px solid rgba(212,168,67,0.35);
+    padding: 6px 18px; border-radius: 50px;
+    font-size: 0.8rem; font-weight: 600; color: var(--gold);
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 28px;
+    animation: fadeUp 0.7s ease both;
+  }
+  .hero-badge::before { content: '●'; font-size: 0.5rem; }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.6rem, 6vw, 5rem);
+    font-weight: 900; line-height: 1.1;
+    margin-bottom: 24px;
+    animation: fadeUp 0.7s 0.12s ease both;
+  }
+  .hero-title em { font-style: normal; color: var(--gold); }
+  .hero-sub {
+    font-size: 1.1rem; color: var(--slate); line-height: 1.7;
+    max-width: 580px; margin: 0 auto 40px;
+    animation: fadeUp 0.7s 0.22s ease both;
+  }
+  .hero-actions {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 0.7s 0.32s ease both;
+  }
+  .btn-primary {
+    background: var(--gold); color: var(--navy);
+    padding: 14px 34px; border-radius: 50px;
+    font-weight: 700; font-size: 0.95rem;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(212,168,67,0.4); }
+  .btn-ghost {
+    background: transparent; color: var(--white);
+    padding: 14px 34px; border-radius: 50px;
+    font-weight: 600; font-size: 0.95rem;
+    text-decoration: none; border: 1.5px solid rgba(255,255,255,0.2);
+    cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--gold); background: rgba(212,168,67,0.08); }
+  .hero-stats {
+    display: flex; gap: 48px; justify-content: center;
+    margin-top: 64px; padding-top: 40px;
+    border-top: 1px solid rgba(136,149,179,0.15);
+    animation: fadeUp 0.7s 0.42s ease both;
+  }
+  .hero-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; font-weight: 700; color: var(--gold);
+  }
+  .hero-stat-label { font-size: 0.8rem; color: var(--slate); margin-top: 4px; }
+
+  /* ─── SECTION COMMONS ─── */
+  section { padding: 100px 60px; max-width: 1200px; margin: 0 auto; }
+  .section-label {
+    display: inline-block;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem); font-weight: 700;
+    line-height: 1.2; margin-bottom: 20px;
+  }
+  .section-sub { color: var(--slate); font-size: 1.05rem; line-height: 1.7; max-width: 580px; }
+
+  /* ─── WHAT IS PROGRAMMING ─── */
+  #programming {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  .prog-visual {
+    position: relative;
+    background: var(--card);
+    border: 1px solid rgba(136,149,179,0.15);
+    border-radius: var(--radius);
+    padding: 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.8;
+    overflow: hidden;
+  }
+  .prog-visual::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--accent));
+  }
+  .prog-bar { display: flex; gap: 8px; margin-bottom: 20px; }
+  .prog-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .prog-dot.red { background: var(--coral); }
+  .prog-dot.yellow { background: var(--gold); }
+  .prog-dot.green { background: var(--green); }
+  .code-line { display: block; }
+  .c-kw { color: #c792ea; }
+  .c-fn { color: #82aaff; }
+  .c-str { color: var(--green); }
+  .c-cm { color: var(--slate); }
+  .c-num { color: var(--gold); }
+  .c-punc { color: var(--white); }
+  .typing-cursor { display: inline-block; width: 2px; height: 1em; background: var(--gold); vertical-align: text-bottom; animation: blink 1s infinite; }
+  .lang-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+  .lang-pill {
+    padding: 6px 16px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;
+    border: 1px solid; transition: transform 0.2s;
+  }
+  .lang-pill:hover { transform: translateY(-2px); }
+  .lp-py { color: #4a90d9; border-color: rgba(74,144,217,0.4); background: rgba(74,144,217,0.08); }
+  .lp-js { color: var(--gold); border-color: rgba(212,168,67,0.4); background: rgba(212,168,67,0.08); }
+  .lp-java { color: var(--coral); border-color: rgba(240,96,96,0.4); background: rgba(240,96,96,0.08); }
+  .lp-c { color: var(--green); border-color: rgba(62,207,142,0.4); background: rgba(62,207,142,0.08); }
+
+  /* ─── COMPILER SECTION ─── */
+  #compiler { background: linear-gradient(135deg, rgba(19,32,87,0.6), rgba(11,20,55,0.9)); border-radius: 24px; }
+  .compiler-flow {
+    display: flex; align-items: center; gap: 0;
+    margin-top: 56px; flex-wrap: wrap; gap: 0;
+  }
+  .cf-step {
+    flex: 1; min-width: 160px;
+    background: var(--card); border: 1px solid rgba(136,149,179,0.15);
+    border-radius: var(--radius); padding: 28px 20px;
+    text-align: center; position: relative;
+    cursor: pointer;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .cf-step:hover { border-color: var(--gold); transform: translateY(-4px); }
+  .cf-step.active { border-color: var(--gold); background: rgba(212,168,67,0.08); }
+  .cf-icon { font-size: 2rem; margin-bottom: 12px; }
+  .cf-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 6px; }
+  .cf-desc { font-size: 0.78rem; color: var(--slate); line-height: 1.5; }
+  .cf-arrow {
+    font-size: 1.5rem; color: var(--gold);
+    padding: 0 12px; flex-shrink: 0;
+    animation: arrowPulse 1.5s ease-in-out infinite;
+  }
+  .compiler-cards {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px;
+  }
+  .comp-card {
+    background: var(--card); border: 1px solid rgba(136,149,179,0.12);
+    border-radius: var(--radius); padding: 28px;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .comp-card:hover { transform: translateY(-6px); border-color: rgba(212,168,67,0.4); }
+  .comp-card-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem; font-weight: 900;
+    color: rgba(212,168,67,0.2);
+    margin-bottom: 8px;
+  }
+  .comp-card-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 10px; }
+  .comp-card-body { color: var(--slate); font-size: 0.875rem; line-height: 1.65; }
+  .comp-tag {
+    display: inline-block; margin-top: 14px;
+    padding: 4px 12px; border-radius: 50px;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px;
+    background: rgba(74,124,240,0.15); color: var(--accent);
+    border: 1px solid rgba(74,124,240,0.3);
+  }
+
+  /* ─── PYTHON SECTION ─── */
+  #python { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .py-cards { display: flex; flex-direction: column; gap: 16px; }
+  .py-card {
+    background: var(--card); border: 1px solid rgba(136,149,179,0.12);
+    border-radius: var(--radius); padding: 22px 24px;
+    display: flex; align-items: flex-start; gap: 16px;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: pointer;
+  }
+  .py-card:hover { border-color: var(--gold); transform: translateX(6px); }
+  .py-card-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; flex-shrink: 0;
+  }
+  .py-card-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+  .py-card-body { font-size: 0.82rem; color: var(--slate); line-height: 1.55; }
+  .timeline {
+    position: relative; padding-left: 28px;
+    margin-top: 32px;
+  }
+  .timeline::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px; background: linear-gradient(to bottom, var(--gold), transparent);
+  }
+  .tl-item { margin-bottom: 28px; position: relative; }
+  .tl-dot {
+    position: absolute; left: -34px; top: 4px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--gold); border: 2px solid var(--navy);
+    box-shadow: 0 0 0 3px rgba(212,168,67,0.25);
+  }
+  .tl-year { font-size: 0.78rem; color: var(--gold); font-weight: 600; margin-bottom: 4px; }
+  .tl-text { font-size: 0.875rem; color: var(--slate); line-height: 1.55; }
+  .tl-text strong { color: var(--white); }
+
+  /* ─── USE CASES ─── */
+  #usecases { text-align: center; }
+  .use-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 56px;
+  }
+  .use-card {
+    background: var(--card); border: 1px solid rgba(136,149,179,0.12);
+    border-radius: var(--radius); padding: 36px 28px;
+    text-align: left; position: relative; overflow: hidden;
+    cursor: pointer; transition: transform 0.3s;
+    group: true;
+  }
+  .use-card:hover { transform: translateY(-8px); }
+  .use-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px; transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .use-card:hover::after { transform: scaleX(1); }
+  .uc-web::after { background: var(--accent); }
+  .uc-ai::after { background: var(--green); }
+  .uc-data::after { background: var(--gold); }
+  .uc-auto::after { background: var(--coral); }
+  .uc-game::after { background: #a78bfa; }
+  .uc-sec::after { background: #fb923c; }
+  .use-emoji { font-size: 2.4rem; margin-bottom: 18px; }
+  .use-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 10px; }
+  .use-body { color: var(--slate); font-size: 0.875rem; line-height: 1.6; }
+  .use-badge {
+    display: inline-block; margin-top: 16px;
+    padding: 4px 12px; border-radius: 50px; font-size: 0.72rem; font-weight: 600;
+  }
+  .uc-web .use-badge { background: rgba(74,124,240,0.15); color: var(--accent); }
+  .uc-ai .use-badge { background: rgba(62,207,142,0.15); color: var(--green); }
+  .uc-data .use-badge { background: rgba(212,168,67,0.15); color: var(--gold); }
+  .uc-auto .use-badge { background: rgba(240,96,96,0.15); color: var(--coral); }
+  .uc-game .use-badge { background: rgba(167,139,250,0.15); color: #a78bfa; }
+  .uc-sec .use-badge { background: rgba(251,146,60,0.15); color: #fb923c; }
+
+  /* ─── QUIZ ─── */
+  #quiz { background: var(--card); border-radius: 28px; padding: 64px; border: 1px solid rgba(136,149,179,0.15); }
+  .quiz-progress { display: flex; gap: 8px; margin-bottom: 40px; }
+  .qp-dot {
+    height: 4px; border-radius: 4px; transition: all 0.3s;
+    background: rgba(136,149,179,0.25);
+  }
+  .qp-dot.done { background: var(--green); }
+  .qp-dot.active { background: var(--gold); }
+  .quiz-q {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700;
+    margin-bottom: 32px; line-height: 1.3;
+  }
+  .quiz-opts { display: flex; flex-direction: column; gap: 14px; }
+  .quiz-opt {
+    background: var(--navy); border: 1.5px solid rgba(136,149,179,0.2);
+    border-radius: 12px; padding: 16px 22px;
+    font-size: 0.95rem; cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    display: flex; align-items: center; gap: 14px;
+    text-align: left;
+  }
+  .quiz-opt:hover:not(.disabled) { border-color: var(--gold); transform: translateX(4px); }
+  .quiz-opt.correct { border-color: var(--green); background: rgba(62,207,142,0.1); }
+  .quiz-opt.wrong { border-color: var(--coral); background: rgba(240,96,96,0.1); }
+  .quiz-opt.disabled { cursor: default; }
+  .opt-letter {
+    width: 30px; height: 30px; border-radius: 8px;
+    border: 1.5px solid rgba(136,149,179,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem; flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .quiz-opt.correct .opt-letter { background: var(--green); border-color: var(--green); color: var(--navy); }
+  .quiz-opt.wrong .opt-letter { background: var(--coral); border-color: var(--coral); color: var(--white); }
+  .quiz-fb {
+    margin-top: 20px; padding: 16px 20px; border-radius: 12px;
+    font-size: 0.9rem; display: none;
+  }
+  .quiz-fb.show { display: block; }
+  .quiz-fb.ok { background: rgba(62,207,142,0.12); color: var(--green); border: 1px solid rgba(62,207,142,0.3); }
+  .quiz-fb.bad { background: rgba(240,96,96,0.1); color: var(--coral); border: 1px solid rgba(240,96,96,0.3); }
+  .quiz-nav { margin-top: 32px; display: flex; justify-content: space-between; align-items: center; }
+  .quiz-score { font-size: 0.85rem; color: var(--slate); }
+  .quiz-score strong { color: var(--white); }
+  .quiz-result {
+    text-align: center; display: none;
+  }
+  .qr-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem; font-weight: 900; color: var(--gold);
+  }
+  .qr-msg { font-size: 1.1rem; color: var(--slate); margin-top: 12px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    max-width: 1200px; margin: 0 auto;
+    padding: 40px 60px;
+    border-top: 1px solid rgba(136,149,179,0.12);
+    display: flex; align-items: center; justify-content: space-between;
+    color: var(--slate); font-size: 0.85rem;
+  }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--gold); }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s, transform 0.7s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes blink {
+    0%,100% { opacity: 1; } 50% { opacity: 0; }
+  }
+  @keyframes arrowPulse {
+    0%,100% { transform: translateX(0); opacity: 1; }
+    50% { transform: translateX(5px); opacity: 0.5; }
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    nav.scrolled { padding: 10px 24px; }
+    .nav-links { display: none; }
+    section { padding: 72px 24px; }
+    #programming, #python { grid-template-columns: 1fr; gap: 40px; }
+    .compiler-cards { grid-template-columns: 1fr; }
+    .use-grid { grid-template-columns: 1fr 1fr; }
+    .hero-stats { gap: 28px; }
+    #quiz { padding: 40px 24px; }
+    footer { flex-direction: column; gap: 12px; text-align: center; }
+    #hero { padding: 120px 24px 60px; }
+    .compiler-flow { gap: 8px; }
+    .cf-arrow { display: none; }
+  }
+  @media (max-width: 600px) {
+    .use-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">Python <span>Fundamentals </span></div>
+  <ul class="nav-links">
+    <li><a href="#programming">Programming</a></li>
+    <li><a href="#compiler">Compiler</a></li>
+    <li><a href="#python">Python</a></li>
+    <li><a href="#usecases">Use Cases</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+  </ul>
+  <a href="#quiz" class="nav-cta">Take the Quiz</a>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Corporate Learning Series</div>
+   
+    <div class="hero-actions">
+      <a href="#programming" class="btn-primary">Start Learning</a>
+      <a href="#quiz" class="btn-ghost">Test Your Knowledge</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num">5+</div>
+        <div class="hero-stat-label">Core Concepts</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">3</div>
+        <div class="hero-stat-label">Language Processors</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">6</div>
+        <div class="hero-stat-label">Python Use Cases</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">10+</div>
+        <div class="hero-stat-label">Quiz Questions</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRAMMING -->
+<section id="programming" class="reveal">
+  <div>
+    <span class="section-label">Chapter 01</span>
+    <h2 class="section-title">What is<br/>Programming?</h2>
+    <p class="section-sub">
+      Programming is the art of writing precise instructions that tell a computer exactly what to do. Computers are powerful but not intelligent — they require human-authored programs to function.
+    </p>
+    <p style="color:var(--slate);font-size:.9rem;line-height:1.7;margin-top:20px;max-width:500px;">
+      A <strong style="color:var(--white)">program</strong> is a carefully ordered sequence of instructions. The act of writing it — in a formal language a machine can process — is <strong style="color:var(--white)">programming</strong>. These formal languages are called <strong style="color:var(--gold)">programming languages</strong>.
+    </p>
+    <div class="lang-pills" style="margin-top:28px;">
+      <span class="lang-pill lp-py">🐍 Python</span>
+      <span class="lang-pill lp-js">⚡ JavaScript</span>
+      <span class="lang-pill lp-java">☕ Java</span>
+      <span class="lang-pill lp-c">🔧 C / C++</span>
+    </div>
+  </div>
+  <div class="prog-visual">
+    <div class="prog-bar">
+      <div class="prog-dot red"></div>
+      <div class="prog-dot yellow"></div>
+      <div class="prog-dot green"></div>
+    </div>
+    <code>
+      <span class="code-line"><span class="c-cm"># A simple Python program</span></span>
+      <span class="code-line"></span>
+      <span class="code-line"><span class="c-kw">def </span><span class="c-fn">greet</span>(name):</span>
+      <span class="code-line">  <span class="c-kw">return </span><span class="c-str">f"Hello, {name}!"</span></span>
+      <span class="code-line"></span>
+      <span class="code-line"><span class="c-fn">message</span> = greet(<span class="c-str">"World"</span>)</span>
+      <span class="code-line"><span class="c-fn">print</span>(message)</span>
+      <span class="code-line"></span>
+      <span class="code-line"><span class="c-cm"># Output:</span></span>
+      <span class="code-line"><span class="c-str">"Hello, World!"</span> <span class="typing-cursor"></span></span>
+    </code>
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(136,149,179,0.15);font-size:0.78rem;color:var(--slate);">
+      🟢 Python &nbsp;·&nbsp; Interpreted &nbsp;·&nbsp; Execution complete in 0.002s
+    </div>
+  </div>
+</section>
+
+<!-- COMPILER -->
+<section id="compiler" class="reveal" style="max-width:1200px;margin:0 auto;">
+  <div style="max-width:1200px;padding:100px 60px;background:linear-gradient(135deg,rgba(19,32,87,0.6),rgba(11,20,55,0.9));border-radius:28px;border:1px solid rgba(136,149,179,0.12);">
+    <span class="section-label">Chapter 02</span>
+    <h2 class="section-title">Language Processors</h2>
+    <p class="section-sub">
+      Computers only understand binary — 0s and 1s. Language processors are the bridge that translates human-readable code into machine-executable instructions.
+    </p>
+
+    <div class="compiler-flow" style="margin-top:48px;">
+      <div class="cf-step active" onclick="highlightStep(this)">
+        <div class="cf-icon">📝</div>
+        <div class="cf-name">Source Code</div>
+        <div class="cf-desc">Human-readable instructions written in a high-level language</div>
+      </div>
+      <div class="cf-arrow">→</div>
+      <div class="cf-step" onclick="highlightStep(this)">
+        <div class="cf-icon">⚙️</div>
+        <div class="cf-name">Processor</div>
+        <div class="cf-desc">Compiler, Interpreter, or Assembler translates the code</div>
+      </div>
+      <div class="cf-arrow">→</div>
+      <div class="cf-step" onclick="highlightStep(this)">
+        <div class="cf-icon">🖥️</div>
+        <div class="cf-name">Machine Code</div>
+        <div class="cf-desc">Binary instructions the CPU can directly execute</div>
+      </div>
+      <div class="cf-arrow">→</div>
+      <div class="cf-step" onclick="highlightStep(this)">
+        <div class="cf-icon">✅</div>
+        <div class="cf-name">Output</div>
+        <div class="cf-desc">Program runs and produces the desired result</div>
+      </div>
+    </div>
+
+    <div class="compiler-cards">
+      <div class="comp-card">
+        <div class="comp-card-num">01</div>
+        <div class="comp-card-title">Compiler</div>
+        <div class="comp-card-body">Translates the <em>entire</em> high-level program into machine code at once, before any execution begins. The full program is analyzed, optimized, and converted to binary in a single pass. Errors must all be resolved before the program can run. <br><br>Typically produces faster runtime performance because translation is done ahead of time.</div>
+        <span class="comp-tag">All-at-once translation</span>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card-num">02</div>
+        <div class="comp-card-title">Interpreter</div>
+        <div class="comp-card-body">Translates and executes the source code <em>one line at a time</em>, during runtime. Each statement is read, converted, and run before moving to the next. This makes debugging easier — errors appear at the exact line they occur. <br><br>Python uses an interpreter, which is why it feels immediate and interactive.</div>
+        <span class="comp-tag" style="background:rgba(62,207,142,0.12);color:var(--green);border-color:rgba(62,207,142,0.3);">Line-by-line execution</span>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card-num">03</div>
+        <div class="comp-card-title">Assembler</div>
+        <div class="comp-card-body">Converts <em>assembly language</em> — a low-level human-readable representation of machine instructions — directly into binary machine code. Assembly language uses mnemonics like <code style="color:var(--gold);font-family:'JetBrains Mono',monospace">ADD A, B</code> which map almost directly to CPU instructions. <br><br>Used in embedded systems, drivers, and performance-critical software.</div>
+        <span class="comp-tag" style="background:rgba(212,168,67,0.12);color:var(--gold);border-color:rgba(212,168,67,0.3);">Low-level translation</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PYTHON -->
+<section id="python" class="reveal">
+  <div>
+    <span class="section-label">Chapter 03</span>
+    <h2 class="section-title">What is<br/>Python?</h2>
+    <p class="section-sub">
+      A high-level, interpreted, general-purpose programming language designed with simplicity and readability at its core.
+    </p>
+
+    <div class="timeline" style="margin-top:36px;">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">Late 1980s</div>
+        <div class="tl-text"><strong>Guido van Rossum</strong> begins designing Python as a successor to the ABC language, aiming for simplicity and elegance.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">1991</div>
+        <div class="tl-text"><strong>Python 0.9.0</strong> is officially released. It already includes classes, exception handling, and functions.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2000</div>
+        <div class="tl-text"><strong>Python 2.0</strong> launches with list comprehensions and garbage collection — a major leap forward.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2008–Today</div>
+        <div class="tl-text"><strong>Python 3.x</strong> becomes the standard. Python now powers AI, data science, automation, and web backends worldwide.</div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div style="margin-bottom:24px;">
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:8px;">Why Python Was Created</h3>
+      <p style="color:var(--slate);font-size:0.9rem;line-height:1.65;">Before Python, programming was largely dominated by languages that prioritized machine efficiency over developer experience. Guido van Rossum set out to change that.</p>
+    </div>
+    <div class="py-cards">
+      <div class="py-card">
+        <div class="py-card-icon" style="background:rgba(240,96,96,0.12);color:var(--coral);">❌</div>
+        <div>
+          <div class="py-card-title">The Problem Before Python</div>
+          <div class="py-card-body">Languages were complex, hard to read, and painful to debug. Writing even simple programs required deep technical knowledge and tolerance for obscure syntax.</div>
+        </div>
+      </div>
+      <div class="py-card">
+        <div class="py-card-icon" style="background:rgba(62,207,142,0.12);color:var(--green);">✅</div>
+        <div>
+          <div class="py-card-title">Python's Solution</div>
+          <div class="py-card-body">Readable like English. Simple to learn, yet powerful enough for enterprise-grade software, AI research, and scientific computing. Fewer lines, more done.</div>
+        </div>
+      </div>
+      <div class="py-card">
+        <div class="py-card-icon" style="background:rgba(212,168,67,0.12);color:var(--gold);">⚡</div>
+        <div>
+          <div class="py-card-title">Python's Key Traits</div>
+          <div class="py-card-body"><strong>High-level</strong> (abstracts hardware), <strong>Interpreted</strong> (line-by-line), <strong>General-purpose</strong> (not domain-locked), <strong>Open source</strong>, and backed by a massive global community.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section id="usecases" class="reveal">
+  <span class="section-label">Chapter 04</span>
+  <h2 class="section-title">Where Python Thrives</h2>
+  <p class="section-sub" style="margin:0 auto;">
+    Python's versatility has made it the language of choice across industries and disciplines.
+  </p>
+  <div class="use-grid">
+    <div class="use-card uc-web">
+      <div class="use-emoji">🌐</div>
+      <div class="use-title">Web Development</div>
+      <div class="use-body">Build powerful server-side web applications and REST APIs with frameworks like Django and Flask. Python handles routing, database interactions, authentication, and more with elegant, maintainable code.</div>
+      <span class="use-badge">Django · Flask · FastAPI</span>
+    </div>
+    <div class="use-card uc-ai">
+      <div class="use-emoji">🤖</div>
+      <div class="use-title">Artificial Intelligence</div>
+      <div class="use-body">Python is the de-facto language of AI and machine learning. Libraries like TensorFlow and PyTorch power neural networks, computer vision, NLP, and deep learning research across academia and industry.</div>
+      <span class="use-badge">TensorFlow · PyTorch · Keras</span>
+    </div>
+    <div class="use-card uc-data">
+      <div class="use-emoji">📊</div>
+      <div class="use-title">Data Science</div>
+      <div class="use-body">From data wrangling to visualization, Python's ecosystem — NumPy, Pandas, Matplotlib — makes it indispensable for analysts and scientists who need to extract insight from raw datasets.</div>
+      <span class="use-badge">NumPy · Pandas · Matplotlib</span>
+    </div>
+    <div class="use-card uc-auto">
+      <div class="use-emoji">⚙️</div>
+      <div class="use-title">Automation</div>
+      <div class="use-body">Automate repetitive tasks — file management, web scraping, form filling, report generation, system monitoring — saving hours of manual work. Python scripts run on all major operating systems.</div>
+      <span class="use-badge">Selenium · PyAutoGUI · Scrapy</span>
+    </div>
+    <div class="use-card uc-game">
+      <div class="use-emoji">🎮</div>
+      <div class="use-title">Game Development</div>
+      <div class="use-body">Create 2D games, simulations, and interactive experiences with Pygame. Python is also used in game scripting and tooling at major studios. Great for learning game logic and physics.</div>
+      <span class="use-badge">Pygame · Arcade · Godot (GDScript)</span>
+    </div>
+    <div class="use-card uc-sec">
+      <div class="use-emoji">🔐</div>
+      <div class="use-title">Cyber Security</div>
+      <div class="use-body">Security professionals use Python for penetration testing, vulnerability scanning, network analysis, and building security tools. Its simplicity makes rapid prototyping of exploits and defenses accessible.</div>
+      <span class="use-badge">Scapy · Metasploit · PyCryptodome</span>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" class="reveal" style="max-width:860px;">
+  <span class="section-label">Test Yourself</span>
+  <h2 class="section-title" style="margin-bottom:40px;">Knowledge Check</h2>
+  <div id="quiz-box">
+    <div class="quiz-progress" id="quiz-progress"></div>
+    <div class="quiz-q" id="quiz-q"></div>
+    <div class="quiz-opts" id="quiz-opts"></div>
+    <div class="quiz-fb" id="quiz-fb"></div>
+    <div class="quiz-nav">
+      <div class="quiz-score">Score: <strong id="quiz-score-val">0</strong> / <span id="quiz-total"></span></div>
+      <button class="btn-primary" id="quiz-next" onclick="nextQ()" style="display:none;padding:12px 28px;font-size:0.9rem;">Next →</button>
+    </div>
+    <div class="quiz-result" id="quiz-result">
+      <div class="qr-score" id="qr-score"></div>
+      <div class="qr-msg" id="qr-msg"></div>
+      <button class="btn-primary" onclick="restartQuiz()" style="margin-top:28px;">Retake Quiz</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Python<span style="color:var(--white)">Academy</span></div>
+  <div>Built for professionals. Designed for clarity.</div>
+  <div>© 2025 Corporate Learning Series</div>
+</footer>
+
+<script>
+// NAV SCROLL
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// SCROLL REVEAL
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// COMPILER STEP HIGHLIGHT
+function highlightStep(el) {
+  document.querySelectorAll('.cf-step').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// QUIZ DATA
+const questions = [
+  { q: "What is programming?", opts: ["Designing hardware circuits", "Writing instructions that tell a computer how to perform a task", "Managing files on a computer", "Setting up a network connection"], ans: 1, exp: "Programming is the process of creating instructions (a program) that tells a computer how to perform a task." },
+  { q: "Which of the following is NOT a programming language?", opts: ["Python", "Java", "HTML (markup language)", "JavaScript"], ans: 2, exp: "HTML is a markup language used for structuring web content, not a programming language." },
+  { q: "What does a compiler do?", opts: ["Runs code one line at a time", "Converts assembly language to machine code", "Translates an entire high-level program into machine code before execution", "Manages computer memory"], ans: 2, exp: "A compiler translates the entire high-level program into machine code in one go, before any execution begins." },
+  { q: "How does an interpreter differ from a compiler?", opts: ["It converts assembly language", "It translates code one line at a time during execution", "It only works with Python", "It is faster than a compiler"], ans: 1, exp: "An interpreter translates and executes source code line by line during runtime, unlike a compiler which processes everything upfront." },
+  { q: "What does an assembler translate?", opts: ["Python to JavaScript", "High-level language to assembly", "Assembly language to machine code", "Machine code to source code"], ans: 2, exp: "An assembler converts assembly language (low-level, human-readable) into binary machine code." },
+  { q: "Who created Python?", opts: ["Linus Torvalds", "James Gosling", "Guido van Rossum", "Dennis Ritchie"], ans: 2, exp: "Python was created by Guido van Rossum, developed in the late 1980s and officially released in 1991." },
+  { q: "When was Python officially released?", opts: ["1985", "1991", "2000", "2008"], ans: 1, exp: "Python was officially released in 1991 by Guido van Rossum." },
+  { q: "Which type of language is Python?", opts: ["Low-level compiled language", "Assembly language", "High-level interpreted general-purpose language", "Machine language"], ans: 2, exp: "Python is a high-level, interpreted, general-purpose programming language." },
+  { q: "Which framework is commonly used for Python web development?", opts: ["React", "Django", "Unity", "Spring"], ans: 1, exp: "Django (and Flask) are the most popular Python web frameworks for building server-side applications." },
+  { q: "Which of these is NOT a primary use case for Python?", opts: ["Data Science", "Artificial Intelligence", "Operating System kernel development", "Automation"], ans: 2, exp: "While Python can be used in many areas, OS kernel development is almost exclusively done in C/C++ due to performance requirements." }
+];
+
+let current = 0, score = 0, answered = false;
+
+function buildProgress() {
+  const p = document.getElementById('quiz-progress');
+  p.innerHTML = questions.map((_, i) => `<div class="qp-dot" id="dot-${i}" style="flex:1"></div>`).join('');
+  document.getElementById('quiz-total').textContent = questions.length;
+}
+
+function renderQ() {
+  const q = questions[current];
+  document.getElementById('quiz-q').textContent = `Q${current+1}. ${q.q}`;
+  document.getElementById('quiz-opts').innerHTML = q.opts.map((o,i) =>
+    `<button class="quiz-opt" onclick="answer(${i})">
+      <span class="opt-letter">${'ABCD'[i]}</span>
+      <span>${o}</span>
+    </button>`).join('');
+  document.getElementById('quiz-fb').className = 'quiz-fb';
+  document.getElementById('quiz-next').style.display = 'none';
+  document.getElementById('quiz-score-val').textContent = score;
+  answered = false;
+  // update progress
+  for(let i=0;i<questions.length;i++){
+    const d = document.getElementById('dot-'+i);
+    d.className = 'qp-dot' + (i < current ? ' done' : i === current ? ' active' : '');
+  }
+}
+
+function answer(idx) {
+  if (answered) return;
+  answered = true;
+  const q = questions[current];
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach(o => o.classList.add('disabled'));
+  opts[idx].classList.add(idx === q.ans ? 'correct' : 'wrong');
+  opts[q.ans].classList.add('correct');
+  const fb = document.getElementById('quiz-fb');
+  if (idx === q.ans) {
+    score++;
+    fb.className = 'quiz-fb show ok';
+    fb.textContent = '✓ Correct! ' + q.exp;
+  } else {
+    fb.className = 'quiz-fb show bad';
+    fb.textContent = '✗ Not quite. ' + q.exp;
+  }
+  document.getElementById('quiz-score-val').textContent = score;
+  document.getElementById('quiz-next').style.display = 'inline-block';
+}
+
+function nextQ() {
+  current++;
+  if (current >= questions.length) {
+    showResult(); return;
+  }
+  renderQ();
+}
+
+function showResult() {
+  document.getElementById('quiz-q').style.display = 'none';
+  document.getElementById('quiz-opts').style.display = 'none';
+  document.getElementById('quiz-fb').style.display = 'none';
+  document.querySelector('.quiz-nav').style.display = 'none';
+  document.getElementById('quiz-progress').style.display = 'none';
+  const res = document.getElementById('quiz-result');
+  res.style.display = 'block';
+  document.getElementById('qr-score').textContent = `${score}/${questions.length}`;
+  const pct = score / questions.length;
+  document.getElementById('qr-msg').textContent = pct === 1
+    ? '🏆 Perfect score! You have mastered the fundamentals.'
+    : pct >= 0.7
+    ? '🎯 Great work! You have a solid understanding of the core concepts.'
+    : '📚 Keep studying! Review the sections above and try again.';
+}
+
+function restartQuiz() {
+  current = 0; score = 0;
+  document.getElementById('quiz-q').style.display = '';
+  document.getElementById('quiz-opts').style.display = '';
+  document.getElementById('quiz-fb').style.display = '';
+  document.querySelector('.quiz-nav').style.display = '';
+  document.getElementById('quiz-progress').style.display = '';
+  document.getElementById('quiz-result').style.display = 'none';
+  renderQ();
+}
+
+buildProgress();
+renderQ();
+</script>
+</body>
+</html>
