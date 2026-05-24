@@ -384,6 +384,40 @@
   @media (max-width: 600px) {
     .use-grid { grid-template-columns: 1fr; }
   }
+  /* Added for the Chapter 1 Image */
+.prog-image-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.prog-image-container img {
+  width: 100%;
+  max-width: 550px;
+  border-radius: var(--radius);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(212, 168, 67, 0.2);
+  animation: float 6s ease-in-out infinite; /* Smooth floating effect */
+}
+
+/* Ensure the grid handles the two columns correctly */
+#programming {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  #programming {
+    grid-template-columns: 1fr; /* Stack on mobile */
+    text-align: center;
+  }
+  .prog-image-container {
+    order: -1; /* Image appears above text on mobile */
+  }
+}
 </style>
 </head>
 <body>
@@ -421,6 +455,29 @@
     </div>
   </div>
   
+  
+</section>
+  <section id="programming" class="reveal">
+  <div>
+    <span class="section-label">Chapter 01</span>
+    <h2 class="section-title">What is<br/>Fundamentals</h2>
+    <p class="section-sub">
+      Programming is the art of writing precise instructions that tell a computer exactly what to do. Computers are powerful but not intelligent—they require human-authored programs to function.
+    </p>
+    <p style="color:var(--slate);font-size:.9rem;line-height:1.7;margin-top:20px;max-width:500px;">
+      A <strong style="color:var(--white)">program</strong> is a carefully ordered sequence of instructions. The act of writing it in a formal language a machine can process is <strong style="color:var(--white)">programming</strong>. These formal languages are called <strong style="color:var(--gold)">programming languages</strong>.
+    </p>
+    <div class="lang-pills" style="margin-top:28px;">
+      <span class="lang-pill lp-py">🐍 Python</span>
+      <span class="lang-pill lp-js">⚡ JavaScript</span>
+      <span class="lang-pill lp-java">☕ Java</span>
+      <span class="lang-pill lp-c">🔧 C / C++</span>
+    </div>
+  </div>
+
+  <div class="prog-image-container">
+    <img src="fund.jpg" alt="Programming Data Flow Visualization">
+  </div>
 </section>
 
 <!-- COMPILER -->
